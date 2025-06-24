@@ -5,47 +5,100 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Protected Birthday Surprise</title>
   <style>
-    /* Ensure 'first-image.jpg' is in your site root */
     body {
-      font-family: 'Segoe UI', Tahoma, sans-serif;
       margin: 0;
       padding: 20px;
-      text-align: center;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
       background: #f0f0f0;
       overflow: hidden;
+      text-align: center;
     }
     #prompt {
-      width: 100%; max-width: 450px; height: 300px;
+      max-width: 450px;
+      height: 300px;
       margin: 80px auto;
       background: url('first-image.jpg') center/cover no-repeat;
-      border-radius: 12px; position: relative;
+      border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 20px; color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px;
+      color: #fff;
     }
     #prompt h2 { font-size: 1.8rem; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
     #prompt small { display: block; margin-bottom: 15px; font-style: italic; text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
-    input[type=password] {
-      padding: 10px; font-size: 1rem; border: none; border-radius: 6px;
-      width: calc(100% - 24px); margin-bottom: 10px;
+    #prompt input {
+      padding: 10px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      width: calc(100% - 24px);
+      margin-bottom: 10px;
     }
     .button {
-      background: rgba(0,0,0,0.6); color: #fff; border: none;
-      padding: 10px; border-radius: 6px; cursor: pointer;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
     }
     #animationOverlay {
-      position: fixed; top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      pointer-events: none; overflow: hidden; z-index: 100;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 100;
     }
-    .balloon { position: absolute; width: 50px; height: 70px; background-size: contain; background-repeat: no-repeat; animation-name: floatUp; animation-duration: 3s; animation-fill-mode: forwards; }
+    .balloon {
+      position: absolute;
+      width: 40px;
+      height: 60px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: floatUp 3s forwards;
+    }
     @keyframes floatUp { 0% { transform: translateY(100vh) scale(0.5); opacity: 1; } 100% { transform: translateY(-20vh) scale(1); opacity: 1; } }
-    .heart { position: absolute; font-size: 2.5rem; color: #fff; animation-name: drift; animation-duration: 4s; animation-fill-mode: forwards; }
+    .heart {
+      position: absolute;
+      font-size: 2rem;
+      color: #ff0000;
+      animation: drift 4s forwards;
+    }
     @keyframes drift { 0% { transform: translateY(0) translateX(0); opacity: 1; } 100% { transform: translateY(-60vh) translateX(20px); opacity: 0; } }
-    .firework { position: absolute; font-size: 2rem; animation-name: explode; animation-duration: 1s; animation-fill-mode: forwards; }
+    .firework {
+      position: absolute;
+      font-size: 2.5rem;
+      animation: explode 1s forwards;
+    }
     @keyframes explode { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
-    #birthdayGreeting { display: none; font-size: 2rem; color: #d6336c; margin-top: 20px; }
-    video { max-width: 100%; border-radius: 8px; margin-top: 10px; display: none; }
+    #birthdayGreeting, #talkSection {
+      display: none;
+      margin-top: 20px;
+    }
+    #birthdayGreeting {
+      font-size: 2rem;
+      color: #d6336c;
+    }
+    #talkSection p {
+      font-size: 1rem;
+      margin: 10px 0;
+    }
+    #talkSection a {
+      color: #1a0dab;
+      text-decoration: underline;
+    }
+    #video {
+      display: none;
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -58,58 +111,67 @@
 
   <div id="animationOverlay"></div>
 
-  <div id="content">
-    <h3 id="birthdayGreeting">Happy Birthday! ❤️</h3>
-    <video id="video" controls>
-      <source src="video.mp4" type="video/mp4">
-    </video>
+  <div id="birthdayGreeting">Happy Birthday! ❤️</div>
+  <div id="talkSection">
+    <p>He wants to talk to you!</p>
+    <p>If you ever wanna chat, <a href="https://instagram.com/accounts/login" target="_blank">Let's go!</a></p>
+    <button onclick="startVideo()" class="button">OK</button>
   </div>
 
+  <video id="video" controls>
+    <source src="video.mp4" type="video/mp4">
+  </video>
+
   <script>
-    function createElement(tag) { return document.createElement(tag); }
+    function createEl(tag) { return document.createElement(tag); }
     function launchAnimations() {
       const overlay = document.getElementById('animationOverlay');
       const vw = window.innerWidth;
       // balloons
       for (let i = 0; i < 6; i++) {
-        const b = createElement('div'); b.className = 'balloon';
+        const b = createEl('div'); b.className = 'balloon';
         b.style.left = Math.random() * vw + 'px';
         b.style.backgroundImage = 'url("https://i.imgur.com/UDXy0r3.png")';
-        b.style.animationDelay = (i * 0.4) + 's';
+        b.style.animationDelay = (i * 0.3) + 's';
         overlay.appendChild(b);
       }
       // hearts
       for (let i = 0; i < 8; i++) {
-        const h = createElement('div'); h.className = 'heart';
+        const h = createEl('div'); h.className = 'heart';
         h.textContent = '❤️';
         h.style.left = Math.random() * vw + 'px';
-        h.style.animationDelay = (i * 0.5) + 's';
+        h.style.animationDelay = (i * 0.4) + 's';
         overlay.appendChild(h);
       }
       // fireworks
       for (let i = 0; i < 5; i++) {
-        const f = createElement('div'); f.className = 'firework';
-        f.textContent = '🎆';
+        const f = createEl('div'); f.className = 'firework';
+        f.textContent = '✨';
         f.style.left = (Math.random() * vw) + 'px';
         f.style.top = (30 + Math.random() * 20) + 'vh';
-        f.style.animationDelay = (i * 0.6) + 's';
+        f.style.animationDelay = (i * 0.5) + 's';
         overlay.appendChild(f);
       }
-      // end animation
       setTimeout(() => {
         overlay.remove();
         document.getElementById('birthdayGreeting').style.display = 'block';
-        const vid = document.getElementById('video'); vid.style.display = 'block'; vid.play();
+        document.getElementById('talkSection').style.display = 'block';
       }, 5000);
     }
     function checkPassword() {
-      const input = document.getElementById('pwd').value;
-      if (input === '0120') {
+      const inpt = document.getElementById('pwd').value;
+      if (inpt === '0120') {
         document.getElementById('prompt').remove();
         launchAnimations();
       } else {
         alert('Incorrect code');
       }
+    }
+    function startVideo() {
+      document.getElementById('talkSection').remove();
+      const vid = document.getElementById('video');
+      vid.style.display = 'block';
+      vid.play();
     }
   </script>
 </body>
