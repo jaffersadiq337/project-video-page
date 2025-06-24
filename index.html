@@ -9,35 +9,30 @@
       margin: 0;
       padding: 20px;
       font-family: 'Segoe UI', Tahoma, sans-serif;
-      background: #f0f0f0;
-      overflow: hidden;
+      background: #ffe6f2;
       text-align: center;
     }
     #prompt {
       max-width: 450px;
-      height: 300px;
       margin: 80px auto;
       background: url('first-image.jpg') center/cover no-repeat;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
       padding: 20px;
       color: #fff;
     }
     #prompt h2 { font-size: 1.8rem; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
-    #prompt small { display: block; margin-bottom: 15px; font-style: italic; text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
+    #prompt small { display: block; margin: 10px 0 20px; font-style: italic; }
     #prompt input {
+      width: calc(100% - 22px);
       padding: 10px;
       font-size: 1rem;
       border: none;
       border-radius: 6px;
-      width: calc(100% - 24px);
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
     .button {
-      background: rgba(0,0,0,0.6);
+      background: #d6336c;
       color: #fff;
       border: none;
       padding: 10px 20px;
@@ -45,59 +40,38 @@
       cursor: pointer;
       font-size: 1rem;
     }
-    #animationOverlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 100;
-    }
-    .balloon {
-      position: absolute;
-      width: 40px;
-      height: 60px;
-      background-size: contain;
-      background-repeat: no-repeat;
-      animation: floatUp 3s forwards;
-    }
-    @keyframes floatUp { 0% { transform: translateY(100vh) scale(0.5); opacity: 1; } 100% { transform: translateY(-20vh) scale(1); opacity: 1; } }
-    .heart {
-      position: absolute;
-      font-size: 2rem;
-      color: #ff0000;
-      animation: drift 4s forwards;
-    }
-    @keyframes drift { 0% { transform: translateY(0) translateX(0); opacity: 1; } 100% { transform: translateY(-60vh) translateX(20px); opacity: 0; } }
-    .firework {
-      position: absolute;
-      font-size: 2.5rem;
-      animation: explode 1s forwards;
-    }
-    @keyframes explode { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
-    #birthdayGreeting, #talkSection {
+    #content {
       display: none;
-      margin-top: 20px;
+      max-width: 450px;
+      margin: 60px auto 0;
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      color: #333;
     }
-    #birthdayGreeting {
+    #greeting {
       font-size: 2rem;
       color: #d6336c;
+      margin-bottom: 20px;
     }
-    #talkSection p {
-      font-size: 1rem;
-      margin: 10px 0;
-    }
-    #talkSection a {
-      color: #1a0dab;
-      text-decoration: underline;
-    }
-    #video {
-      display: none;
-      max-width: 100%;
+    #content video {
+      width: 100%;
       border-radius: 8px;
-      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    #content p {
+      margin: 10px 0;
+      font-size: 1rem;
+    }
+    #content a {
+      color: #d6336c;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    #notify-form button {
+      margin-top: 15px;
+      background: #555;
     }
   </style>
 </head>
@@ -109,69 +83,29 @@
     <button onclick="checkPassword()" class="button">Submit</button>
   </div>
 
-  <div id="animationOverlay"></div>
-
-  <div id="birthdayGreeting">Happy Birthday! ❤️</div>
-  <div id="talkSection">
-    <p>He wants to talk to you!</p>
-    <p>If you ever wanna chat, <a href="https://instagram.com/accounts/login" target="_blank">Let's go!</a></p>
-    <button onclick="startVideo()" class="button">OK</button>
+  <div id="content">
+    <div id="greeting">Happy Birthday Aishu ❤️</div>
+    <video id="video" controls>
+      <source src="video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <p>I am waiting here if you wanna talk: <a href="https://instagram.com/accounts/login" target="_blank">Let's go!</a></p>
+    <p>Never want to see me? 😢</p>
+    <form id="notify-form" action="https://formspree.io/f/your-form-id" method="POST">
+      <input type="hidden" name="_subject" value="Unsubscribe Notification" />
+      <button type="submit" class="button">Notify Me</button>
+    </form>
   </div>
 
-  <video id="video" controls>
-    <source src="video.mp4" type="video/mp4">
-  </video>
-
   <script>
-    function createEl(tag) { return document.createElement(tag); }
-    function launchAnimations() {
-      const overlay = document.getElementById('animationOverlay');
-      const vw = window.innerWidth;
-      // balloons
-      for (let i = 0; i < 6; i++) {
-        const b = createEl('div'); b.className = 'balloon';
-        b.style.left = Math.random() * vw + 'px';
-        b.style.backgroundImage = 'url("https://i.imgur.com/UDXy0r3.png")';
-        b.style.animationDelay = (i * 0.3) + 's';
-        overlay.appendChild(b);
-      }
-      // hearts
-      for (let i = 0; i < 8; i++) {
-        const h = createEl('div'); h.className = 'heart';
-        h.textContent = '❤️';
-        h.style.left = Math.random() * vw + 'px';
-        h.style.animationDelay = (i * 0.4) + 's';
-        overlay.appendChild(h);
-      }
-      // fireworks
-      for (let i = 0; i < 5; i++) {
-        const f = createEl('div'); f.className = 'firework';
-        f.textContent = '✨';
-        f.style.left = (Math.random() * vw) + 'px';
-        f.style.top = (30 + Math.random() * 20) + 'vh';
-        f.style.animationDelay = (i * 0.5) + 's';
-        overlay.appendChild(f);
-      }
-      setTimeout(() => {
-        overlay.remove();
-        document.getElementById('birthdayGreeting').style.display = 'block';
-        document.getElementById('talkSection').style.display = 'block';
-      }, 5000);
-    }
     function checkPassword() {
-      const inpt = document.getElementById('pwd').value;
-      if (inpt === '0120') {
-        document.getElementById('prompt').remove();
-        launchAnimations();
+      var input = document.getElementById('pwd').value;
+      if (input === '0120') {
+        document.getElementById('prompt').style.display = 'none';
+        document.getElementById('content').style.display = 'block';
       } else {
         alert('Incorrect code');
       }
-    }
-    function startVideo() {
-      document.getElementById('talkSection').remove();
-      const vid = document.getElementById('video');
-      vid.style.display = 'block';
-      vid.play();
     }
   </script>
 </body>
