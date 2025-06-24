@@ -3,14 +3,102 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Protected Video Page</title>
+  <title>Protected Birthday Surprise</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; text-align: center; }
-    #content { display: none; }
-    .button { margin: 10px; padding: 10px 20px; font-size: 1rem; }
-    video { max-width: 100%; height: auto; margin-top: 10px; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      padding: 20px;
+      text-align: center;
+      background: #f0f0f0;
+      transition: background 0.5s ease;
+    }
+    #prompt, #content { max-width: 400px; margin: 0 auto; }
+    #prompt {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-top: 100px;
+      animation: bounce 1s;
+    }
+    #prompt h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+    #prompt small {
+      color: #666;
+    }
+    input[type=password] {
+      padding: 10px;
+      font-size: 1rem;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      width: 80%;
+      margin-bottom: 15px;
+      transition: border-color 0.3s;
+    }
+    input[type=password]:focus {
+      border-color: #ff69b4;
+      outline: none;
+    }
+    .button {
+      background: #ff69b4;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .button:hover {
+      background: #ff85c1;
+    }
+    #content {
+      display: none;
+      animation: fadeIn 1s ease-out;
+      margin-top: 50px;
+    }
+    #content.unlocked {
+      background: #ffe6f2;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    #greeting {
+      font-size: 2rem;
+      color: #d6336c;
+      margin-bottom: 20px;
+      animation: pop 0.6s ease;
+    }
+    video { max-width: 100%; height: auto; border-radius: 8px; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounce {
+      0% { transform: translateY(-20px); }
+      60% { transform: translateY(10px); }
+      100% { transform: translateY(0); }
+    }
+    @keyframes pop {
+      0% { transform: scale(0.5); opacity: 0; }
+      80% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    .hearts {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: url('data:image/svg+xml;<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><text x="0" y="15" font-size="20">❤️</text></svg>') repeat;
+      opacity: 0.1;
+      z-index: -1;
+    }
   </style>
-  <!-- Google Analytics snippet for monitoring opens and clicks -->
+  <!-- Google Analytics snippet -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXX-X"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -20,14 +108,17 @@
   </script>
 </head>
 <body>
-
-  <h2>Enter Password</h2>
-  <input type="password" id="pwd" placeholder="Password" />
-  <button onclick="checkPassword()" class="button">Submit</button>
+  <div class="hearts"></div>
+  <div id="prompt">
+    <h2>👀 Who are you?</h2>
+    <small>Remember the code I told you earlier</small><br><br>
+    <input type="password" id="pwd" placeholder="Enter code" />
+    <button onclick="checkPassword()" class="button">Submit</button>
+  </div>
 
   <div id="content">
-    <h3>Test Message</h3>
-    <video id="video" controls autoplay>
+    <h3 id="greeting">Happy Birthday! 🎉💖</h3>
+    <video id="video" controls>
       <source src="video.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
@@ -35,7 +126,6 @@
     <p>If you ever wanna talk, <a href="https://instagram.com/accounts/login" target="_blank" id="talk-link">I am waiting here</a></p>
 
     <p>Never want to see me again?</p>
-    <!-- Formspree for notifications -->
     <form action="https://formspree.io/f/your-form-id" method="POST" id="notify-form">
       <input type="hidden" name="_subject" value="Unsubscribe Notification" />
       <input type="hidden" name="url" id="page-url" />
@@ -47,25 +137,24 @@
     function checkPassword() {
       var input = document.getElementById('pwd').value;
       if (input === '0120') {
-        document.getElementById('content').style.display = 'block';
+        document.getElementById('prompt').style.display = 'none';
+        var content = document.getElementById('content');
+        document.body.style.background = '#ffe6f2';
+        content.classList.add('unlocked');
+        content.style.display = 'block';
         gtag('event', 'unlocked', { 'event_category': 'Password', 'event_label': 'Correct' });
       } else {
-        alert('Incorrect password');
+        alert('Incorrect code');
         gtag('event', 'unlock_failed', { 'event_category': 'Password', 'event_label': 'Incorrect' });
       }
     }
-
-    // Track link clicks
     document.getElementById('talk-link').addEventListener('click', function() {
       gtag('event', 'click', { 'event_category': 'Link', 'event_label': 'TalkLink' });
     });
-
-    // Populate hidden field and track form submit
     document.getElementById('notify-form').addEventListener('submit', function() {
       document.getElementById('page-url').value = window.location.href;
       gtag('event', 'submit', { 'event_category': 'Form', 'event_label': 'Unsubscribe' });
     });
   </script>
-
 </body>
 </html>
