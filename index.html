@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Protected Video Page</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; text-align: center; }
+    #content { display: none; }
+    .button { margin: 10px; padding: 10px 20px; font-size: 1rem; }
+    video { max-width: 100%; height: auto; margin-top: 10px; }
+  </style>
+  <!-- Google Analytics snippet for monitoring opens and clicks -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXX-X"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);} 
+    gtag('js', new Date());
+    gtag('config', 'UA-XXXXXX-X');
+  </script>
+</head>
+<body>
+
+  <h2>Enter Password</h2>
+  <input type="password" id="pwd" placeholder="Password" />
+  <button onclick="checkPassword()" class="button">Submit</button>
+
+  <div id="content">
+    <h3>Test Message</h3>
+    <video id="video" controls autoplay>
+      <source src="video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+
+    <p>If you ever wanna talk, <a href="https://instagram.com/accounts/login" target="_blank" id="talk-link">I am waiting here</a></p>
+
+    <p>Never want to see me again?</p>
+    <!-- Formspree for notifications -->
+    <form action="https://formspree.io/f/your-form-id" method="POST" id="notify-form">
+      <input type="hidden" name="_subject" value="Unsubscribe Notification" />
+      <input type="hidden" name="url" id="page-url" />
+      <button type="submit" class="button">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    function checkPassword() {
+      var input = document.getElementById('pwd').value;
+      if (input === '0120') {
+        document.getElementById('content').style.display = 'block';
+        gtag('event', 'unlocked', { 'event_category': 'Password', 'event_label': 'Correct' });
+      } else {
+        alert('Incorrect password');
+        gtag('event', 'unlock_failed', { 'event_category': 'Password', 'event_label': 'Incorrect' });
+      }
+    }
+
+    // Track link clicks
+    document.getElementById('talk-link').addEventListener('click', function() {
+      gtag('event', 'click', { 'event_category': 'Link', 'event_label': 'TalkLink' });
+    });
+
+    // Populate hidden field and track form submit
+    document.getElementById('notify-form').addEventListener('submit', function() {
+      document.getElementById('page-url').value = window.location.href;
+      gtag('event', 'submit', { 'event_category': 'Form', 'event_label': 'Unsubscribe' });
+    });
+  </script>
+
+</body>
+</html>
