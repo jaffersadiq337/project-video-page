@@ -23,7 +23,7 @@
       color: #fff;
     }
     #prompt h2 { font-size: 1.8rem; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
-    #prompt small { display: block; margin: 10px 0 20px; font-style: italic; }
+    #prompt small { display: block; margin: 10px 0 20px; font-style: italic; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
     #prompt input {
       width: calc(100% - 22px);
       padding: 10px;
@@ -108,14 +108,41 @@
   </div>
 
   <script>
+    function blastCelebration() {
+      const duration = 2 * 1000;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+      function randomInRange(min, max) {
+        return Math.random() * (max - min) + min;
+      }
+
+      const interval = setInterval(function() {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+
+        const particleCount = 50 * (timeLeft / duration);
+        confetti({
+          ...defaults,
+          particleCount,
+          origin: {
+            x: randomInRange(0, 1),
+            y: randomInRange(0, 1)
+          }
+        });
+      }, 200);
+    }
+
     function checkPassword() {
       const input = document.getElementById('pwd').value;
       if (input === '0120') {
         document.getElementById('prompt').style.display = 'none';
         const content = document.getElementById('content');
         content.style.display = 'block';
-        // Launch confetti
-        confetti({ particleCount: 150, spread: 60, origin: { y: 0.4 } });
+        blastCelebration();
       } else {
         alert('Incorrect code');
       }
