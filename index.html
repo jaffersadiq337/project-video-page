@@ -12,21 +12,43 @@
       background: #f0f0f0;
       transition: background 0.5s ease;
     }
-    #prompt, #content { max-width: 400px; margin: 0 auto; }
+    #prompt, #content {
+      max-width: 450px;
+      margin: 0 auto;
+      position: relative;
+    }
     #prompt {
       background: #fff;
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      margin-top: 100px;
-      animation: bounce 1s;
+      margin-top: 80px;
+      animation: glow 2s ease-in-out infinite;
+      border: 3px solid #f5a623;
+    }
+    #prompt .characters {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    /* Apply cartoon-style filters to transform your single photo into a playful illustration */
+    #prompt .characters img {
+      width: 100px;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      animation: bounce 1.5s infinite;
+      filter: contrast(1.5) saturate(1.8) brightness(1.1) drop-shadow(2px 4px 4px rgba(0,0,0,0.2));
     }
     #prompt h2 {
-      font-size: 1.5rem;
-      margin-bottom: 10px;
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+      color: #d35400;
     }
     #prompt small {
-      color: #666;
+      color: #7f8c8d;
+      font-style: italic;
     }
     input[type=password] {
       padding: 10px;
@@ -34,15 +56,15 @@
       border: 2px solid #ddd;
       border-radius: 6px;
       width: 80%;
-      margin-bottom: 15px;
+      margin: 15px 0;
       transition: border-color 0.3s;
     }
     input[type=password]:focus {
-      border-color: #ff69b4;
+      border-color: #e74c3c;
       outline: none;
     }
     .button {
-      background: #ff69b4;
+      background: #e74c3c;
       color: #fff;
       border: none;
       padding: 12px 24px;
@@ -52,7 +74,15 @@
       transition: background 0.3s;
     }
     .button:hover {
-      background: #ff85c1;
+      background: #c0392b;
+    }
+    @keyframes glow {
+      0%,100% { box-shadow: 0 0 5px #f5a623; }
+      50% { box-shadow: 0 0 20px #f5a623; }
+    }
+    @keyframes bounce {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
     #content {
       display: none;
@@ -71,31 +101,19 @@
       margin-bottom: 20px;
       animation: pop 0.6s ease;
     }
-    video { max-width: 100%; height: auto; border-radius: 8px; }
+    video {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes bounce {
-      0% { transform: translateY(-20px); }
-      60% { transform: translateY(10px); }
-      100% { transform: translateY(0); }
     }
     @keyframes pop {
       0% { transform: scale(0.5); opacity: 0; }
       80% { transform: scale(1.1); opacity: 1; }
       100% { transform: scale(1); }
-    }
-    .hearts {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      background: url('data:image/svg+xml;<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><text x="0" y="15" font-size="20">❤️</text></svg>') repeat;
-      opacity: 0.1;
-      z-index: -1;
     }
   </style>
   <!-- Google Analytics snippet -->
@@ -108,11 +126,15 @@
   </script>
 </head>
 <body>
-  <div class="hearts"></div>
   <div id="prompt">
-    <h2>👀 Who are you?</h2>
-    <small>Remember the code I told you earlier</small><br><br>
-    <input type="password" id="pwd" placeholder="Enter code" />
+    <div class="characters">
+      <!-- Use your single image twice or crop into two characters, then apply the cartoon filter -->
+      <img src="your-photo.png" alt="Character">
+      <img src="your-photo.png" alt="Character">    
+    </div>
+    <h2>Flynn Rider & Maximus</h2>
+    <small>Only the bravest may whisper the secret of Rapunzel’s tower…</small><br><br>
+    <input type="password" id="pwd" placeholder="Whisper it here" />
     <button onclick="checkPassword()" class="button">Submit</button>
   </div>
 
