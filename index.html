@@ -11,6 +11,7 @@
       font-family: 'Segoe UI', Tahoma, sans-serif;
       background: #ffe6f2;
       text-align: center;
+      overflow-x: hidden;
     }
     #prompt {
       max-width: 450px;
@@ -49,11 +50,18 @@
       padding: 20px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       color: #333;
+      position: relative;
     }
     #greeting {
       font-size: 2rem;
       color: #d6336c;
       margin-bottom: 20px;
+      animation: shimmer 2s infinite;
+    }
+    @keyframes shimmer {
+      0% { text-shadow: 0 0 5px #fff, 0 0 10px #fff; }
+      50% { text-shadow: 0 0 20px #fff, 0 0 30px #fff; }
+      100% { text-shadow: 0 0 5px #fff, 0 0 10px #fff; }
     }
     #content video {
       width: 100%;
@@ -74,6 +82,8 @@
       background: #555;
     }
   </style>
+  <!-- Confetti library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
   <div id="prompt">
@@ -84,13 +94,13 @@
   </div>
 
   <div id="content">
-    <div id="greeting">Happy Birthday Aishu ❤️</div>
+    <div id="greeting">Happy Birthday Aishu 💖</div>
     <video id="video" controls>
       <source src="video.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
     <p>I am waiting here if you wanna talk: <a href="https://instagram.com/accounts/login" target="_blank">Let's go!</a></p>
-    <p>Never want to see me? 😢</p>
+    <p>Never want to see me? <span style="font-size:1.2rem;">😢</span></p>
     <form id="notify-form" action="https://formspree.io/f/your-form-id" method="POST">
       <input type="hidden" name="_subject" value="Unsubscribe Notification" />
       <button type="submit" class="button">Notify Me</button>
@@ -99,10 +109,13 @@
 
   <script>
     function checkPassword() {
-      var input = document.getElementById('pwd').value;
+      const input = document.getElementById('pwd').value;
       if (input === '0120') {
         document.getElementById('prompt').style.display = 'none';
-        document.getElementById('content').style.display = 'block';
+        const content = document.getElementById('content');
+        content.style.display = 'block';
+        // Launch confetti
+        confetti({ particleCount: 150, spread: 60, origin: { y: 0.4 } });
       } else {
         alert('Incorrect code');
       }
