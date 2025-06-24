@@ -76,7 +76,15 @@
       font-size: 2rem;
       color: #d6336c;
       margin-bottom: 20px;
-      animation: shimmer 2s infinite;
+      animation: flyUp 2s ease-in-out forwards;
+      position: relative;
+      top: 50vh;
+      opacity: 0;
+    }
+    @keyframes flyUp {
+      0% { top: 50vh; opacity: 0; }
+      50% { opacity: 1; }
+      100% { top: 0; opacity: 1; }
     }
     @keyframes shimmer {
       0% { text-shadow: 0 0 5px #fff, 0 0 10px #fff; }
@@ -87,10 +95,17 @@
       width: 100%;
       border-radius: 8px;
       margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeIn 2s ease-in-out 2s forwards;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
     }
     #content p {
       margin: 10px 0;
       font-size: 1rem;
+      opacity: 0;
+      animation: fadeIn 2s ease-in-out 2.5s forwards;
     }
     #content a {
       color: #d6336c;
