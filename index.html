@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Protected Birthday Surprise</title>
   <style>
+    /* Ensure you upload 'first-image.jpg' to your site root. It will be used as the prompt background. */
     body {
       font-family: 'Segoe UI', Tahoma, sans-serif;
       padding: 20px;
@@ -17,7 +18,7 @@
       max-width: 450px;
       height: 300px;
       margin: 80px auto;
-      background: url('first-image.png') center/cover no-repeat;
+      background: url('first-image.jpg') center/cover no-repeat;
       border-radius: 12px;
       position: relative;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -55,6 +56,7 @@
       cursor: pointer;
     }
     #peek {
+      /* Use 'second-image.jfif' for the peek effect; upload it to your site root */
       position: fixed;
       top: 50%;
       right: -200px;
@@ -90,7 +92,7 @@
   </div>
 
   <!-- Hidden peek image -->
-  <img id="peek" src="second-image.png" alt="Surprise" />
+  <img id="peek" src="second-image.jfif" alt="Surprise" />
   
   <!-- Content area -->
   <div id="content" style="display:none;">
